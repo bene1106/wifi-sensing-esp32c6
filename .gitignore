@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Daten (zu groß für GitHub)
+data/
+archive/live_*.csv
+archive/*.png
+
+# Logs
+live_log_*.csv
+live_activity_*.csv
+*.log
+
+# Modell-Backups (nur das aktuelle behalten)
+archive/*.pkl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

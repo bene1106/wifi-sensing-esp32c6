@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WiFi-Sensing Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+    color: #fff;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 {
+    text-align: center; margin-bottom: 10px;
+    background: linear-gradient(90deg, #00d4ff, #00ff88);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 2.5em;
+  }
+  .subtitle { text-align: center; opacity: 0.6; margin-bottom: 30px; }
+  
+  .main-status {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    margin-bottom: 30px;
+    transition: all 0.3s;
+  }
+  .main-status.still   { background: rgba(0, 150, 255, 0.15); border-color: #0096ff; }
+  .main-status.typing  { background: rgba(0, 255, 100, 0.15); border-color: #00ff64; }
+  .main-status.waving  { background: rgba(255, 150, 0, 0.15); border-color: #ff9600; }
+  
+  .activity-emoji { font-size: 8em; margin-bottom: 10px; }
+  .activity-name {
+    font-size: 4em; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 4px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+  
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 25px;
+  }
+  .card h2 { font-size: 1.2em; margin-bottom: 15px; opacity: 0.8; }
+  
+  .conf-bar {
+    margin-bottom: 12px;
+  }
+  .conf-label {
+    display: flex; justify-content: space-between;
+    margin-bottom: 5px; font-size: 0.95em;
+  }
+  .conf-track {
+    height: 25px; background: rgba(255,255,255,0.1);
+    border-radius: 12px; overflow: hidden;
+  }
+  .conf-fill {
+    height: 100%; transition: width 0.3s;
+    background: linear-gradient(90deg, #00d4ff, #00ff88);
+  }
+  .conf-fill.still  { background: linear-gradient(90deg, #0096ff, #00d4ff); }
+  .conf-fill.typing { background: linear-gradient(90deg, #00ff64, #00ff88); }
+  .conf-fill.waving { background: linear-gradient(90deg, #ff9600, #ffd700); }
+  
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 15px; margin-top: 10px;
+  }
+  .stat { text-align: center; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+  .stat-value { font-size: 1.8em; font-weight: bold; color: #00d4ff; }
+  .stat-label { font-size: 0.8em; opacity: 0.7; margin-top: 3px; }
+  
+  canvas { width: 100%; height: 200px; display: block; border-radius: 10px; }
+  
+  .footer {
+    text-align: center; margin-top: 30px; opacity: 0.5; font-size: 0.85em;
+  }
+  .pulse {
+    display: inline-block; width: 10px; height: 10px;
+    background: #00ff88; border-radius: 50%;
+    animation: pulse 1s infinite; margin-right: 5px;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📡 WiFi-Sensing Live Dashboard</h1>
+  <p class="subtitle">ESP32-C6 · Channel State Information · Aktivitäts-Erkennung</p>
+  
+  <div id="mainStatus" class="main-status">
+    <div id="emoji" class="activity-emoji">⏳</div>
+    <div id="activityName" class="activity-name">WAITING...</div>
+  </div>
+  
+  <div class="grid">
+    <div class="card">
+      <h2>🎯 Klassen-Confidence</h2>
+      <div id="confBars"></div>
+    </div>
+    
+    <div class="card">
+      <h2>📊 Live-CSI Heatmap</h2>
+      <canvas id="heatmap"></canvas>
+    </div>
+  </div>
+  
+  <div class="card">
+    <h2>📈 System-Status</h2>
+    <div class="stats">
+      <div class="stat">
+        <div id="rate" class="stat-value">0</div>
+        <div class="stat-label">Pakete/Sek</div>
+      </div>
+      <div class="stat">
+        <div id="rssi" class="stat-value">0</div>
+        <div class="stat-label">RSSI (dBm)</div>
+      </div>
+      <div class="stat">
+        <div id="count" class="stat-value">0</div>
+        <div class="stat-label">Pakete gesamt</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <span class="pulse"></span> Live · Update alle 200ms · ESP32-C6 + Python + Flask
+  </div>
+</div>
+
+<script>
+const EMOJIS = { still: '🧘', typing: '⌨️', waving: '👋' };
+const NAMES = { still: 'STILL', typing: 'TYPING', waving: 'WAVING' };
+
+const canvas = document.getElementById('heatmap');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function viridis(t) {
+  // Approximation der viridis-Colormap
+  const r = Math.round(68  + (253-68)  * t);
+  const g = Math.round(1   + (231-1)   * t);
+  const b = Math.round(84  + (37-84)   * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+function drawHeatmap(heatmap) {
+  if (!heatmap || heatmap.length === 0) return;
+  const T = heatmap.length;
+  const F = heatmap[0].length;
+  const cellW = canvas.width / T;
+  const cellH = canvas.height / F;
+  
+  // Max für Normalisierung
+  let maxVal = 0;
+  for (const row of heatmap) for (const v of row) if (v > maxVal) maxVal = v;
+  if (maxVal < 1) maxVal = 1;
+  
+  for (let t = 0; t < T; t++) {
+    for (let f = 0; f < F; f++) {
+      const v = Math.min(1, heatmap[t][f] / maxVal);
+      ctx.fillStyle = viridis(v);
+      ctx.fillRect(t * cellW, (F-1-f) * cellH, cellW + 1, cellH + 1);
+    }
+  }
+}
+
+async function update() {
+  try {
+    const r = await fetch('/state');
+    const s = await r.json();
+    
+    const pred = s.smoothed_prediction;
+    const main = document.getElementById('mainStatus');
+    main.className = 'main-status ' + pred;
+    document.getElementById('emoji').textContent = EMOJIS[pred] || '⏳';
+    document.getElementById('activityName').textContent = NAMES[pred] || 'WAITING...';
+    
+    // Confidence bars
+    const bars = document.getElementById('confBars');
+    const classes = Object.keys(s.confidences);
+    bars.innerHTML = classes.map(c => `
+      <div class="conf-bar">
+        <div class="conf-label">
+          <span>${EMOJIS[c] || ''} ${c}</span>
+          <span>${s.confidences[c].toFixed(1)}%</span>
+        </div>
+        <div class="conf-track">
+          <div class="conf-fill ${c}" style="width: ${s.confidences[c]}%"></div>
+        </div>
+      </div>`).join('');
+    
+    // Stats
+    document.getElementById('rate').textContent = s.rate.toFixed(0);
+    document.getElementById('rssi').textContent = s.rssi;
+    document.getElementById('count').textContent = s.packet_count.toLocaleString();
+    
+    // Heatmap
+    drawHeatmap(s.heatmap);
+  } catch (e) {
+    console.error('Update error:', e);
+  }
+}
+
+setInterval(update, 200);
+update();
+</script>
+</body>
+</html>
