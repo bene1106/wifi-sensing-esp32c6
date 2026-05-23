@@ -1,54 +1,54 @@
-# 📡 WiFi-Sensing mit ESP32-C6: Aktivitäts-Erkennung
+# Ã°Å¸â€œÂ¡ WiFi-Sensing mit ESP32-C6: AktivitÃƒÂ¤ts-Erkennung
 
 
 
-> Passive Erkennung menschlicher Aktivitäten allein durch WiFi-Channel-State-Information (CSI) — ohne Kamera, ohne Mikrofon, ohne Wearables.
+> Passive Erkennung menschlicher AktivitÃƒÂ¤ten allein durch WiFi-Channel-State-Information (CSI) Ã¢â‚¬â€ ohne Kamera, ohne Mikrofon, ohne Wearables.
 
 
 
-!\[Confusion Matrix](confusion\_matrix\_activity.png)
+![Confusion Matrix](confusion_matrix_activity.png)
 
 
 
-\*\*Live-Demo erkennt 3 Aktivitäten am Schreibtisch:\*\*
+**Live-Demo erkennt 3 AktivitÃƒÂ¤ten am Schreibtisch:**
 
-\- 🧘 \*\*STILL\*\* — Hände im Schoß, nur Atmen
+- Ã°Å¸Â§Ëœ **STILL** Ã¢â‚¬â€ HÃƒÂ¤nde im SchoÃƒÅ¸, nur Atmen
 
-\- ⌨️ \*\*TYPING\*\* — Aktives Tippen auf der Tastatur
+- Ã¢Å’Â¨Ã¯Â¸Â **TYPING** Ã¢â‚¬â€ Aktives Tippen auf der Tastatur
 
-\- 👋 \*\*WAVING\*\* — Hand winkt über der Tastatur
-
-
-
-\*\*Genauigkeit: 97.5 % (5-Fold Cross-Validation)\*\*
+- Ã°Å¸â€˜â€¹ **WAVING** Ã¢â‚¬â€ Hand winkt ÃƒÂ¼ber der Tastatur
 
 
 
-\---
+**Genauigkeit: 97.5 % (5-Fold Cross-Validation)**
 
 
 
-\## 🎯 Was ist WiFi-Sensing?
+---
 
 
 
-Funkwellen werden von Menschen, Möbeln und Wänden reflektiert. Die \*\*Channel State Information (CSI)\*\* beschreibt, wie sich das Signal pro WiFi-Subcarrier verändert — sie ist im Prinzip ein "Funk-Fingerabdruck" des Raums.
+## Ã°Å¸Å½Â¯ Was ist WiFi-Sensing?
 
 
 
-Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit Machine Learning lassen sich verschiedene Bewegungsmuster trennen.
+Funkwellen werden von Menschen, MÃƒÂ¶beln und WÃƒÂ¤nden reflektiert. Die **Channel State Information (CSI)** beschreibt, wie sich das Signal pro WiFi-Subcarrier verÃƒÂ¤ndert Ã¢â‚¬â€ sie ist im Prinzip ein "Funk-Fingerabdruck" des Raums.
 
 
 
-\*\*Anwendungsbereiche (kommerziell):\*\* Origin Wireless, Cognitive Systems, Aerial Technologies — Präsenz-Erkennung, Sturzdetektion, Atemfrequenz-Monitoring.
+Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch. Mit Machine Learning lassen sich verschiedene Bewegungsmuster trennen.
 
 
 
-\---
+**Anwendungsbereiche (kommerziell):** Origin Wireless, Cognitive Systems, Aerial Technologies Ã¢â‚¬â€ PrÃƒÂ¤senz-Erkennung, Sturzdetektion, Atemfrequenz-Monitoring.
 
 
 
-\## 🔧 Hardware
+---
+
+
+
+## Ã°Å¸â€Â§ Hardware
 
 
 
@@ -56,67 +56,67 @@ Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit 
 
 |------------|--------|----------|
 
-| 2× ESP32-C6 | Waveshare ESP32-C6-WROOM-1-N8 | Sender (TX) und Empfänger (RX) |
+| 2Ãƒâ€” ESP32-C6 | Waveshare ESP32-C6-WROOM-1-N8 | Sender (TX) und EmpfÃƒÂ¤nger (RX) |
 
-| 2× USB-C-Kabel | Datenkabel | Power + Serial |
+| 2Ãƒâ€” USB-C-Kabel | Datenkabel | Power + Serial |
 
-| 1× Laptop | Windows 10/11 | Daten verarbeiten + Modell |
-
-
-
-\*\*Gesamtkosten: \~25 €\*\*
+| 1Ãƒâ€” Laptop | Windows 10/11 | Daten verarbeiten + Modell |
 
 
 
-\---
+**Gesamtkosten: \~25 Ã¢â€šÂ¬**
 
 
 
-\## 🏗️ Architektur
+---
+
+
+
+## Ã°Å¸Ââ€”Ã¯Â¸Â Architektur
 
 
 
 ```
 
-┌─────────────┐     ESP-NOW Pakete (100 Hz)      ┌─────────────┐
+Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â     ESP-NOW Pakete (100 Hz)      Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â
 
-│  TX-Board   │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━ →   │  RX-Board   │
+Ã¢â€â€š  TX-Board   Ã¢â€â€š  Ã¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€Â Ã¢â€ â€™   Ã¢â€â€š  RX-Board   Ã¢â€â€š
 
-│  (csi\_send) │       Channel 11, 2.4 GHz        │  (csi\_recv) │
+Ã¢â€â€š  (csi_send) Ã¢â€â€š       Channel 11, 2.4 GHz        Ã¢â€â€š  (csi_recv) Ã¢â€â€š
 
-└─────────────┘                                  └──────┬──────┘
+Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ                                  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ
 
-&#x20;                                                       │ Serial @ 921600
+                                                        Ã¢â€â€š Serial @ 921600
 
-&#x20;                                                       ▼
+                                                        Ã¢â€“Â¼
 
-&#x20;                                 ┌─────────────────────────────┐
+                                  Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â
 
-&#x20;                                 │   Python (Laptop)            │
+                                  Ã¢â€â€š   Python (Laptop)            Ã¢â€â€š
 
-&#x20;                                 │  ┌───────────────────────┐  │
+                                  Ã¢â€â€š  Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â  Ã¢â€â€š
 
-&#x20;                                 │  │ CSI-Parser → Buffer   │  │
+                                  Ã¢â€â€š  Ã¢â€â€š CSI-Parser Ã¢â€ â€™ Buffer   Ã¢â€â€š  Ã¢â€â€š
 
-&#x20;                                 │  │ Feature Extraction    │  │
+                                  Ã¢â€â€š  Ã¢â€â€š Feature Extraction    Ã¢â€â€š  Ã¢â€â€š
 
-&#x20;                                 │  │ RandomForest Modell   │  │
+                                  Ã¢â€â€š  Ã¢â€â€š RandomForest Modell   Ã¢â€â€š  Ã¢â€â€š
 
-&#x20;                                 │  │ Flask + Browser       │  │
+                                  Ã¢â€â€š  Ã¢â€â€š Flask + Browser       Ã¢â€â€š  Ã¢â€â€š
 
-&#x20;                                 │  └───────────────────────┘  │
+                                  Ã¢â€â€š  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ  Ã¢â€â€š
 
-&#x20;                                 └─────────────────────────────┘
+                                  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ
 
 ```
 
 
 
-\---
+---
 
 
 
-\## 📂 Projektstruktur
+## Ã°Å¸â€œâ€š Projektstruktur
 
 
 
@@ -124,53 +124,53 @@ Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit 
 
 .
 
-├── 1\_record\_csi.py             # CSI-Daten aufzeichnen mit Label
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 1_record_csi.py             # CSI-Daten aufzeichnen mit Label
 
-├── 2\_diagnose.py               # Statistik pro Aufnahme prüfen
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 2_diagnose.py               # Statistik pro Aufnahme prÃƒÂ¼fen
 
-├── 3\_train\_activity.py         # ML-Modell trainieren (Random Forest)
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 3_train_activity.py         # ML-Modell trainieren (Random Forest)
 
-├── 4\_live\_activity.py          # Konsolen-Live-Inferenz
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 4_live_activity.py          # Konsolen-Live-Inferenz
 
-├── 5\_dashboard\_backend.py      # Flask-Server
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 5_dashboard_backend.py      # Flask-Server
 
-├── 5\_dashboard\_frontend.html   # Browser-Dashboard
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 5_dashboard_frontend.html   # Browser-Dashboard
 
-├── live\_heatmap.py             # Live-Heatmap zum Debuggen
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ live_heatmap.py             # Live-Heatmap zum Debuggen
 
-├── analyze\_log.py              # Log-Files auswerten
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ analyze_log.py              # Log-Files auswerten
 
-├── rf\_model\_activity.pkl       # Trainiertes Modell
+Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ rf_model_activity.pkl       # Trainiertes Modell
 
-└── requirements.txt
+Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ requirements.txt
 
 ```
 
 
 
-\---
+---
 
 
 
-\## 🚀 Setup (Windows)
+## Ã°Å¸Å¡â‚¬ Setup (Windows)
 
 
 
-\### 1. ESP32-C6 vorbereiten
+### 1. ESP32-C6 vorbereiten
 
 
 
-Diese Anleitung setzt voraus, dass \[ESP-IDF v5.4](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32c6/get-started/) installiert ist.
+Diese Anleitung setzt voraus, dass [ESP-IDF v5.4](https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32c6/get-started/) installiert ist.
 
 
 
-\*\*TX-Board flashen:\*\*
+**TX-Board flashen:**
 
 ```powershell
 
 git clone https://github.com/espressif/esp-csi.git
 
-cd esp-csi/examples/get-started/csi\_send
+cd esp-csi/examples/get-started/csi_send
 
 idf.py set-target esp32c6
 
@@ -180,11 +180,11 @@ idf.py -p COM3 flash
 
 
 
-\*\*RX-Board flashen:\*\*
+**RX-Board flashen:**
 
 ```powershell
 
-cd ../csi\_recv
+cd ../csi_recv
 
 idf.py set-target esp32c6
 
@@ -194,11 +194,11 @@ idf.py -p COM5 flash
 
 
 
-> COM-Ports unter Windows mit Geräte-Manager prüfen. Treiber: \[CH343SER](https://www.wch-ic.com/downloads/CH343SER\_EXE.html).
+> COM-Ports unter Windows mit GerÃƒÂ¤te-Manager prÃƒÂ¼fen. Treiber: [CH343SER](https://www.wch-ic.com/downloads/CH343SER_EXE.html).
 
 
 
-\### 2. Python-Umgebung
+### 2. Python-Umgebung
 
 
 
@@ -214,51 +214,51 @@ pip install -r requirements.txt
 
 
 
-\### 3. Daten aufnehmen
+### 3. Daten aufnehmen
 
 
 
 ```powershell
 
-python 1\_record\_csi.py still 120     # 2 Min still sitzen
+python 1_record_csi.py still 120     # 2 Min still sitzen
 
-python 1\_record\_csi.py typing 120    # 2 Min tippen
+python 1_record_csi.py typing 120    # 2 Min tippen
 
-python 1\_record\_csi.py waving 120    # 2 Min winken
+python 1_record_csi.py waving 120    # 2 Min winken
 
 ```
 
 
 
-\### 4. Modell trainieren
+### 4. Modell trainieren
 
 
 
 ```powershell
 
-python 3\_train\_activity.py
+python 3_train_activity.py
 
 ```
 
 
 
-Erzeugt `rf\_model\_activity.pkl` und `confusion\_matrix\_activity.png`.
+Erzeugt `rf_model_activity.pkl` und `confusion_matrix_activity.png`.
 
 
 
-\### 5. Live-Dashboard starten
+### 5. Live-Dashboard starten
 
 
 
 ```powershell
 
-python 5\_dashboard\_backend.py
+python 5_dashboard_backend.py
 
 ```
 
 
 
-Im Browser öffnen: \*\*http://localhost:5000\*\*
+Im Browser ÃƒÂ¶ffnen: **http://localhost:5000**
 
 
 
@@ -266,15 +266,15 @@ Vom Handy (gleiches WLAN): `http://<PC-IP>:5000`
 
 
 
-\---
+---
 
 
 
-\## 📊 Methodik
+## Ã°Å¸â€œÅ  Methodik
 
 
 
-\### Feature-Extraktion
+### Feature-Extraktion
 
 
 
@@ -282,31 +282,31 @@ Pro Sliding-Window (90 Pakete = 1 Sek) werden 320 Features pro Sample extrahiert
 
 
 
-\- \*\*Std pro Subcarrier\*\* — zeitliche Variation
+- **Std pro Subcarrier** Ã¢â‚¬â€ zeitliche Variation
 
-\- \*\*Mean Absolute Difference\*\* — Änderungsrate
+- **Mean Absolute Difference** Ã¢â‚¬â€ Ãƒâ€žnderungsrate
 
-\- \*\*Std der Differenzen\*\* — Variabilität der Änderungen
+- **Std der Differenzen** Ã¢â‚¬â€ VariabilitÃƒÂ¤t der Ãƒâ€žnderungen
 
-\- \*\*Perzentil-Range (P90 − P10)\*\* — robuster Range
+- **Perzentil-Range (P90 Ã¢Ë†â€™ P10)** Ã¢â‚¬â€ robuster Range
 
-\- \*\*Mean Absolute Beschleunigung\*\* — 2. Ableitung
-
-
-
-Diese Features sind \*\*kalibrationsunabhängig\*\* — absolute Amplitudenpegel werden bewusst nicht verwendet, da der ESP32 die AGC laufend anpasst.
+- **Mean Absolute Beschleunigung** Ã¢â‚¬â€ 2. Ableitung
 
 
 
-\### Validierung
+Diese Features sind **kalibrationsunabhÃƒÂ¤ngig** Ã¢â‚¬â€ absolute Amplitudenpegel werden bewusst nicht verwendet, da der ESP32 die AGC laufend anpasst.
 
 
 
-\*\*Time-Based 5-Fold Cross-Validation\*\* statt zufälligem Split. Innerhalb jeder Klasse werden die Windows zeitlich in 5 Blöcke geteilt — so wird verhindert, dass zeitnah aufeinanderfolgende Windows in beide Sets gelangen (Data Leakage).
+### Validierung
 
 
 
-\### Ergebnisse
+**Time-Based 5-Fold Cross-Validation** statt zufÃƒÂ¤lligem Split. Innerhalb jeder Klasse werden die Windows zeitlich in 5 BlÃƒÂ¶cke geteilt Ã¢â‚¬â€ so wird verhindert, dass zeitnah aufeinanderfolgende Windows in beide Sets gelangen (Data Leakage).
+
+
+
+### Ergebnisse
 
 
 
@@ -322,47 +322,47 @@ Diese Features sind \*\*kalibrationsunabhängig\*\* — absolute Amplitudenpegel
 
 
 
-\*\*Gesamtgenauigkeit: 97.54 % (± 1.86 %)\*\*
+**Gesamtgenauigkeit: 97.54 % (Ã‚Â± 1.86 %)**
 
 
 
-\---
+---
 
 
 
-\## ⚠️ Bekannte Limitierungen
+## Ã¢Å¡Â Ã¯Â¸Â Bekannte Limitierungen
 
 
 
-1\. \*\*Inter-Session-Drift\*\* — Der WiFi-Kanal ändert sich über Stunden hinweg (AGC-Rekalibrierung, andere Geräte, Multipath). Ein Modell, das heute trainiert wurde, funktioniert morgen möglicherweise nicht mehr. Lösung: \*\*On-Site-Retraining\*\* vor jedem Demo-Session.
+1\. **Inter-Session-Drift** Ã¢â‚¬â€ Der WiFi-Kanal ÃƒÂ¤ndert sich ÃƒÂ¼ber Stunden hinweg (AGC-Rekalibrierung, andere GerÃƒÂ¤te, Multipath). Ein Modell, das heute trainiert wurde, funktioniert morgen mÃƒÂ¶glicherweise nicht mehr. LÃƒÂ¶sung: **On-Site-Retraining** vor jedem Demo-Session.
 
 
 
-2\. \*\*Setup-Sensitivität\*\* — Werden die Boards verschoben, muss neu trainiert werden.
+2\. **Setup-SensitivitÃƒÂ¤t** Ã¢â‚¬â€ Werden die Boards verschoben, muss neu trainiert werden.
 
 
 
-3\. \*\*Klassen-Trennbarkeit\*\* — `still` vs. `typing` haben sehr ähnliche TempVar; das Modell unterscheidet sie durch subtile Subcarrier-spezifische Muster. In anderen Umgebungen evtl. schwieriger.
+3\. **Klassen-Trennbarkeit** Ã¢â‚¬â€ `still` vs. `typing` haben sehr ÃƒÂ¤hnliche TempVar; das Modell unterscheidet sie durch subtile Subcarrier-spezifische Muster. In anderen Umgebungen evtl. schwieriger.
 
 
 
-\---
+---
 
 
 
-\## 🔬 Wissenschaftlicher Kontext
+## Ã°Å¸â€Â¬ Wissenschaftlicher Kontext
 
 
 
-Inspiriert durch die IEEE 802.11bf Standardisierung (WiFi-Sensing) und akademische Arbeiten zu CSI-basierter Aktivitätserkennung (z.B. \*EI\* von Microsoft Research, \*FALL-Sense\*, \*WiCount\*).
+Inspiriert durch die IEEE 802.11bf Standardisierung (WiFi-Sensing) und akademische Arbeiten zu CSI-basierter AktivitÃƒÂ¤tserkennung (z.B. *EI* von Microsoft Research, *FALL-Sense*, *WiCount*).
 
 
 
-\---
+---
 
 
 
-\## 📝 Lizenz
+## Ã°Å¸â€œÂ Lizenz
 
 
 
@@ -370,15 +370,15 @@ MIT
 
 
 
-\---
+---
 
 
 
-\## 🙏 Credits
+## Ã°Å¸â„¢Â Credits
 
 
 
-\- \*\*esp-csi\*\* von \[Espressif](https://github.com/espressif/esp-csi) — CSI-Firmware
+- **esp-csi** von [Espressif](https://github.com/espressif/esp-csi) Ã¢â‚¬â€ CSI-Firmware
 
-\- ESP32-C6-Hardware: \[Waveshare](https://www.waveshare.com/wiki/ESP32-C6-WROOM-1)
+- ESP32-C6-Hardware: [Waveshare](https://www.waveshare.com/wiki/ESP32-C6-WROOM-1)
 
