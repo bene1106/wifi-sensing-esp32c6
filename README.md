@@ -28,7 +28,7 @@
 
 
 
-## 🎯 Was ist WiFi-Sensing?
+## Was ist WiFi-Sensing?
 
 
 
@@ -48,7 +48,7 @@ Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit 
 
 
 
-## 🔧 Hardware
+## Hardware
 
 
 
@@ -72,7 +72,7 @@ Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit 
 
 
 
-## 🏗️ Architektur
+## Architektur
 
 
 
@@ -116,7 +116,7 @@ Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit 
 
 
 
-## 📂 Projektstruktur
+## Projektstruktur
 
 
 
@@ -152,7 +152,7 @@ Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit 
 
 
 
-## 🚀 Setup (Windows)
+## Setup (Windows)
 
 
 
@@ -270,7 +270,7 @@ Vom Handy (gleiches WLAN): `http://<PC-IP>:5000`
 
 
 
-## 📊 Methodik
+## Methodik
 
 
 
@@ -330,7 +330,7 @@ Diese Features sind **kalibrationsunabhängig** — absolute Amplitudenpegel wer
 
 
 
-## ⚠️ Bekannte Limitierungen
+## Bekannte Limitierungen
 
 
 
@@ -350,7 +350,7 @@ Diese Features sind **kalibrationsunabhängig** — absolute Amplitudenpegel wer
 
 
 
-## 🔬 Wissenschaftlicher Kontext
+## Wissenschaftlicher Kontext
 
 
 
@@ -362,7 +362,7 @@ Inspiriert durch die IEEE 802.11bf Standardisierung (WiFi-Sensing) und akademisc
 
 
 
-## 📝 Lizenz
+## Lizenz
 
 
 
@@ -374,7 +374,7 @@ MIT
 
 
 
-## 🙏 Credits
+## Credits
 
 
 
