@@ -1,8 +1,8 @@
-# Ã°Å¸â€œÂ¡ WiFi-Sensing mit ESP32-C6: AktivitÃƒÂ¤ts-Erkennung
+# 📡 WiFi-Sensing mit ESP32-C6: Aktivitäts-Erkennung
 
 
 
-> Passive Erkennung menschlicher AktivitÃƒÂ¤ten allein durch WiFi-Channel-State-Information (CSI) Ã¢â‚¬â€ ohne Kamera, ohne Mikrofon, ohne Wearables.
+> Passive Erkennung menschlicher Aktivitäten allein durch WiFi-Channel-State-Information (CSI) — ohne Kamera, ohne Mikrofon, ohne Wearables.
 
 
 
@@ -10,13 +10,13 @@
 
 
 
-**Live-Demo erkennt 3 AktivitÃƒÂ¤ten am Schreibtisch:**
+**Live-Demo erkennt 3 Aktivitäten am Schreibtisch:**
 
-- Ã°Å¸Â§Ëœ **STILL** Ã¢â‚¬â€ HÃƒÂ¤nde im SchoÃƒÅ¸, nur Atmen
+- 🧘 **STILL** — Hände im Schoß, nur Atmen
 
-- Ã¢Å’Â¨Ã¯Â¸Â **TYPING** Ã¢â‚¬â€ Aktives Tippen auf der Tastatur
+- ⌨️ **TYPING** — Aktives Tippen auf der Tastatur
 
-- Ã°Å¸â€˜â€¹ **WAVING** Ã¢â‚¬â€ Hand winkt ÃƒÂ¼ber der Tastatur
+- 👋 **WAVING** — Hand winkt über der Tastatur
 
 
 
@@ -28,19 +28,19 @@
 
 
 
-## Ã°Å¸Å½Â¯ Was ist WiFi-Sensing?
+## 🎯 Was ist WiFi-Sensing?
 
 
 
-Funkwellen werden von Menschen, MÃƒÂ¶beln und WÃƒÂ¤nden reflektiert. Die **Channel State Information (CSI)** beschreibt, wie sich das Signal pro WiFi-Subcarrier verÃƒÂ¤ndert Ã¢â‚¬â€ sie ist im Prinzip ein "Funk-Fingerabdruck" des Raums.
+Funkwellen werden von Menschen, Möbeln und Wänden reflektiert. Die **Channel State Information (CSI)** beschreibt, wie sich das Signal pro WiFi-Subcarrier verändert — sie ist im Prinzip ein "Funk-Fingerabdruck" des Raums.
 
 
 
-Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch. Mit Machine Learning lassen sich verschiedene Bewegungsmuster trennen.
+Wenn eine Person sich bewegt, ändert sich diese Signatur charakteristisch. Mit Machine Learning lassen sich verschiedene Bewegungsmuster trennen.
 
 
 
-**Anwendungsbereiche (kommerziell):** Origin Wireless, Cognitive Systems, Aerial Technologies Ã¢â‚¬â€ PrÃƒÂ¤senz-Erkennung, Sturzdetektion, Atemfrequenz-Monitoring.
+**Anwendungsbereiche (kommerziell):** Origin Wireless, Cognitive Systems, Aerial Technologies — Präsenz-Erkennung, Sturzdetektion, Atemfrequenz-Monitoring.
 
 
 
@@ -48,7 +48,7 @@ Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch
 
 
 
-## Ã°Å¸â€Â§ Hardware
+## 🔧 Hardware
 
 
 
@@ -56,59 +56,15 @@ Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch
 
 |------------|--------|----------|
 
-| 2Ãƒâ€” ESP32-C6 | Waveshare ESP32-C6-WROOM-1-N8 | Sender (TX) und EmpfÃƒÂ¤nger (RX) |
+| 2× ESP32-C6 | Waveshare ESP32-C6-WROOM-1-N8 | Sender (TX) und Empfänger (RX) |
 
-| 2Ãƒâ€” USB-C-Kabel | Datenkabel | Power + Serial |
+| 2× USB-C-Kabel | Datenkabel | Power + Serial |
 
-| 1Ãƒâ€” Laptop | Windows 10/11 | Daten verarbeiten + Modell |
-
-
-
-**Gesamtkosten: \~25 Ã¢â€šÂ¬**
+| 1× Laptop | Windows 10/11 | Daten verarbeiten + Modell |
 
 
 
----
-
-
-
-## Ã°Å¸Ââ€”Ã¯Â¸Â Architektur
-
-
-
-```
-
-Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â     ESP-NOW Pakete (100 Hz)      Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â
-
-Ã¢â€â€š  TX-Board   Ã¢â€â€š  Ã¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€ÂÃ¢â€Â Ã¢â€ â€™   Ã¢â€â€š  RX-Board   Ã¢â€â€š
-
-Ã¢â€â€š  (csi_send) Ã¢â€â€š       Channel 11, 2.4 GHz        Ã¢â€â€š  (csi_recv) Ã¢â€â€š
-
-Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ                                  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ
-
-                                                        Ã¢â€â€š Serial @ 921600
-
-                                                        Ã¢â€“Â¼
-
-                                  Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â
-
-                                  Ã¢â€â€š   Python (Laptop)            Ã¢â€â€š
-
-                                  Ã¢â€â€š  Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â  Ã¢â€â€š
-
-                                  Ã¢â€â€š  Ã¢â€â€š CSI-Parser Ã¢â€ â€™ Buffer   Ã¢â€â€š  Ã¢â€â€š
-
-                                  Ã¢â€â€š  Ã¢â€â€š Feature Extraction    Ã¢â€â€š  Ã¢â€â€š
-
-                                  Ã¢â€â€š  Ã¢â€â€š RandomForest Modell   Ã¢â€â€š  Ã¢â€â€š
-
-                                  Ã¢â€â€š  Ã¢â€â€š Flask + Browser       Ã¢â€â€š  Ã¢â€â€š
-
-                                  Ã¢â€â€š  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ  Ã¢â€â€š
-
-                                  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ
-
-```
+**Gesamtkosten: \~25 €**
 
 
 
@@ -116,7 +72,51 @@ Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch
 
 
 
-## Ã°Å¸â€œâ€š Projektstruktur
+## 🏗️ Architektur
+
+
+
+```
+
+┌─────────────┐     ESP-NOW Pakete (100 Hz)      ┌─────────────┐
+
+│  TX-Board   │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━ →   │  RX-Board   │
+
+│  (csi_send) │       Channel 11, 2.4 GHz        │  (csi_recv) │
+
+└─────────────┘                                  └──────┬──────┘
+
+                                                        │ Serial @ 921600
+
+                                                        ▼
+
+                                  ┌─────────────────────────────┐
+
+                                  │   Python (Laptop)            │
+
+                                  │  ┌───────────────────────┐  │
+
+                                  │  │ CSI-Parser → Buffer   │  │
+
+                                  │  │ Feature Extraction    │  │
+
+                                  │  │ RandomForest Modell   │  │
+
+                                  │  │ Flask + Browser       │  │
+
+                                  │  └───────────────────────┘  │
+
+                                  └─────────────────────────────┘
+
+```
+
+
+
+---
+
+
+
+## 📂 Projektstruktur
 
 
 
@@ -124,25 +124,25 @@ Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch
 
 .
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 1_record_csi.py             # CSI-Daten aufzeichnen mit Label
+├── 1_record_csi.py             # CSI-Daten aufzeichnen mit Label
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 2_diagnose.py               # Statistik pro Aufnahme prÃƒÂ¼fen
+├── 2_diagnose.py               # Statistik pro Aufnahme prüfen
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 3_train_activity.py         # ML-Modell trainieren (Random Forest)
+├── 3_train_activity.py         # ML-Modell trainieren (Random Forest)
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 4_live_activity.py          # Konsolen-Live-Inferenz
+├── 4_live_activity.py          # Konsolen-Live-Inferenz
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 5_dashboard_backend.py      # Flask-Server
+├── 5_dashboard_backend.py      # Flask-Server
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ 5_dashboard_frontend.html   # Browser-Dashboard
+├── 5_dashboard_frontend.html   # Browser-Dashboard
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ live_heatmap.py             # Live-Heatmap zum Debuggen
+├── live_heatmap.py             # Live-Heatmap zum Debuggen
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ analyze_log.py              # Log-Files auswerten
+├── analyze_log.py              # Log-Files auswerten
 
-Ã¢â€Å“Ã¢â€â‚¬Ã¢â€â‚¬ rf_model_activity.pkl       # Trainiertes Modell
+├── rf_model_activity.pkl       # Trainiertes Modell
 
-Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬ requirements.txt
+└── requirements.txt
 
 ```
 
@@ -152,7 +152,7 @@ Wenn eine Person sich bewegt, ÃƒÂ¤ndert sich diese Signatur charakteristisch
 
 
 
-## Ã°Å¸Å¡â‚¬ Setup (Windows)
+## 🚀 Setup (Windows)
 
 
 
@@ -194,7 +194,7 @@ idf.py -p COM5 flash
 
 
 
-> COM-Ports unter Windows mit GerÃƒÂ¤te-Manager prÃƒÂ¼fen. Treiber: [CH343SER](https://www.wch-ic.com/downloads/CH343SER_EXE.html).
+> COM-Ports unter Windows mit Geräte-Manager prüfen. Treiber: [CH343SER](https://www.wch-ic.com/downloads/CH343SER_EXE.html).
 
 
 
@@ -258,7 +258,7 @@ python 5_dashboard_backend.py
 
 
 
-Im Browser ÃƒÂ¶ffnen: **http://localhost:5000**
+Im Browser öffnen: **http://localhost:5000**
 
 
 
@@ -270,7 +270,7 @@ Vom Handy (gleiches WLAN): `http://<PC-IP>:5000`
 
 
 
-## Ã°Å¸â€œÅ  Methodik
+## 📊 Methodik
 
 
 
@@ -282,19 +282,19 @@ Pro Sliding-Window (90 Pakete = 1 Sek) werden 320 Features pro Sample extrahiert
 
 
 
-- **Std pro Subcarrier** Ã¢â‚¬â€ zeitliche Variation
+- **Std pro Subcarrier** — zeitliche Variation
 
-- **Mean Absolute Difference** Ã¢â‚¬â€ Ãƒâ€žnderungsrate
+- **Mean Absolute Difference** — Änderungsrate
 
-- **Std der Differenzen** Ã¢â‚¬â€ VariabilitÃƒÂ¤t der Ãƒâ€žnderungen
+- **Std der Differenzen** — Variabilität der Änderungen
 
-- **Perzentil-Range (P90 Ã¢Ë†â€™ P10)** Ã¢â‚¬â€ robuster Range
+- **Perzentil-Range (P90 − P10)** — robuster Range
 
-- **Mean Absolute Beschleunigung** Ã¢â‚¬â€ 2. Ableitung
+- **Mean Absolute Beschleunigung** — 2. Ableitung
 
 
 
-Diese Features sind **kalibrationsunabhÃƒÂ¤ngig** Ã¢â‚¬â€ absolute Amplitudenpegel werden bewusst nicht verwendet, da der ESP32 die AGC laufend anpasst.
+Diese Features sind **kalibrationsunabhängig** — absolute Amplitudenpegel werden bewusst nicht verwendet, da der ESP32 die AGC laufend anpasst.
 
 
 
@@ -302,7 +302,7 @@ Diese Features sind **kalibrationsunabhÃƒÂ¤ngig** Ã¢â‚¬â€ absolut
 
 
 
-**Time-Based 5-Fold Cross-Validation** statt zufÃƒÂ¤lligem Split. Innerhalb jeder Klasse werden die Windows zeitlich in 5 BlÃƒÂ¶cke geteilt Ã¢â‚¬â€ so wird verhindert, dass zeitnah aufeinanderfolgende Windows in beide Sets gelangen (Data Leakage).
+**Time-Based 5-Fold Cross-Validation** statt zufälligem Split. Innerhalb jeder Klasse werden die Windows zeitlich in 5 Blöcke geteilt — so wird verhindert, dass zeitnah aufeinanderfolgende Windows in beide Sets gelangen (Data Leakage).
 
 
 
@@ -322,7 +322,7 @@ Diese Features sind **kalibrationsunabhÃƒÂ¤ngig** Ã¢â‚¬â€ absolut
 
 
 
-**Gesamtgenauigkeit: 97.54 % (Ã‚Â± 1.86 %)**
+**Gesamtgenauigkeit: 97.54 % (± 1.86 %)**
 
 
 
@@ -330,31 +330,19 @@ Diese Features sind **kalibrationsunabhÃƒÂ¤ngig** Ã¢â‚¬â€ absolut
 
 
 
-## Ã¢Å¡Â Ã¯Â¸Â Bekannte Limitierungen
+## ⚠️ Bekannte Limitierungen
 
 
 
-1\. **Inter-Session-Drift** Ã¢â‚¬â€ Der WiFi-Kanal ÃƒÂ¤ndert sich ÃƒÂ¼ber Stunden hinweg (AGC-Rekalibrierung, andere GerÃƒÂ¤te, Multipath). Ein Modell, das heute trainiert wurde, funktioniert morgen mÃƒÂ¶glicherweise nicht mehr. LÃƒÂ¶sung: **On-Site-Retraining** vor jedem Demo-Session.
+1\. **Inter-Session-Drift** — Der WiFi-Kanal ändert sich über Stunden hinweg (AGC-Rekalibrierung, andere Geräte, Multipath). Ein Modell, das heute trainiert wurde, funktioniert morgen möglicherweise nicht mehr. Lösung: **On-Site-Retraining** vor jedem Demo-Session.
 
 
 
-2\. **Setup-SensitivitÃƒÂ¤t** Ã¢â‚¬â€ Werden die Boards verschoben, muss neu trainiert werden.
+2\. **Setup-Sensitivität** — Werden die Boards verschoben, muss neu trainiert werden.
 
 
 
-3\. **Klassen-Trennbarkeit** Ã¢â‚¬â€ `still` vs. `typing` haben sehr ÃƒÂ¤hnliche TempVar; das Modell unterscheidet sie durch subtile Subcarrier-spezifische Muster. In anderen Umgebungen evtl. schwieriger.
-
-
-
----
-
-
-
-## Ã°Å¸â€Â¬ Wissenschaftlicher Kontext
-
-
-
-Inspiriert durch die IEEE 802.11bf Standardisierung (WiFi-Sensing) und akademische Arbeiten zu CSI-basierter AktivitÃƒÂ¤tserkennung (z.B. *EI* von Microsoft Research, *FALL-Sense*, *WiCount*).
+3\. **Klassen-Trennbarkeit** — `still` vs. `typing` haben sehr ähnliche TempVar; das Modell unterscheidet sie durch subtile Subcarrier-spezifische Muster. In anderen Umgebungen evtl. schwieriger.
 
 
 
@@ -362,7 +350,19 @@ Inspiriert durch die IEEE 802.11bf Standardisierung (WiFi-Sensing) und akademisc
 
 
 
-## Ã°Å¸â€œÂ Lizenz
+## 🔬 Wissenschaftlicher Kontext
+
+
+
+Inspiriert durch die IEEE 802.11bf Standardisierung (WiFi-Sensing) und akademische Arbeiten zu CSI-basierter Aktivitätserkennung (z.B. *EI* von Microsoft Research, *FALL-Sense*, *WiCount*).
+
+
+
+---
+
+
+
+## 📝 Lizenz
 
 
 
@@ -374,11 +374,11 @@ MIT
 
 
 
-## Ã°Å¸â„¢Â Credits
+## 🙏 Credits
 
 
 
-- **esp-csi** von [Espressif](https://github.com/espressif/esp-csi) Ã¢â‚¬â€ CSI-Firmware
+- **esp-csi** von [Espressif](https://github.com/espressif/esp-csi) — CSI-Firmware
 
 - ESP32-C6-Hardware: [Waveshare](https://www.waveshare.com/wiki/ESP32-C6-WROOM-1)
 
