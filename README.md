@@ -1,4 +1,4 @@
-\# 📡 WiFi-Sensing mit ESP32-C6: Aktivitäts-Erkennung
+# 📡 WiFi-Sensing mit ESP32-C6: Aktivitäts-Erkennung
 
 
 
